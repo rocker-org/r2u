@@ -64,6 +64,8 @@ RUN apt-get update \
 	&& chown root:staff "/usr/local/lib/R/site-library" \
 	&& chmod g+ws "/usr/local/lib/R/site-library" \
 ## Install a number littler scripts
+  	&& ln -s /usr/lib/R/site-library/littler/examples/build.r /usr/local/bin/build.r \
+  	&& ln -s /usr/lib/R/site-library/littler/examples/check.r /usr/local/bin/check.r \
   	&& ln -s /usr/lib/R/site-library/littler/examples/install.r /usr/local/bin/install.r \
  	&& ln -s /usr/lib/R/site-library/littler/examples/install2.r /usr/local/bin/install2.r \
 	&& ln -s /usr/lib/R/site-library/littler/examples/installBioc.r /usr/local/bin/installBioc.r \
@@ -73,8 +75,8 @@ RUN apt-get update \
  	&& ln -s /usr/lib/R/site-library/littler/examples/testInstalled.r /usr/local/bin/testInstalled.r \
   	&& ln -s /usr/lib/R/site-library/littler/examples/update.r /usr/local/bin/update.r \
 ## Configure bspm and set one helpful apt default
-        && echo "suppressMessages(bspm::enable())" >> /etc/R/Rprofile.site \
         && echo "options(bspm.version.check=FALSE)" >> /etc/R/Rprofile.site \
+        && echo "suppressMessages(bspm::enable())" >> /etc/R/Rprofile.site \
         && echo 'APT::Install-Recommends "false";' > /etc/apt/apt.conf.d/90local-no-recommends \
 	&& rm -rf /tmp/downloaded_packages/ /tmp/*.rds \
  	&& rm -rf /var/lib/apt/lists/*
