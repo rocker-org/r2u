@@ -1,5 +1,6 @@
 name: Build Container Images
 on:
+  workflow_dispatch:
   push:
     paths:
       - "**/Dockerfile"
