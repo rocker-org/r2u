@@ -103,7 +103,7 @@ jobs:
       - name: Upload digests
         uses: actions/upload-artifact@v3
         with:
-          name: r2udigests
+          name: r2udigests-${{ github.run_id }}
           path: /tmp/digests/**
           if-no-files-found: error
           retention-days: 1
@@ -122,7 +122,7 @@ jobs:
       - name: Download digests
         uses: actions/download-artifact@v3
         with:
-          name: r2udigests
+          name: r2udigests-${{ github.run_id }}
           path: /tmp/digests
 
       - name: Set up Docker Buildx
