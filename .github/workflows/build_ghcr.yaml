@@ -47,7 +47,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
+          username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push container image to ghcr
@@ -132,7 +132,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
+          username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract metadata for container image
@@ -147,10 +147,9 @@ jobs:
         id: vars
         run: |
           echo container=$(echo '${{ steps.meta.outputs.tags }}' | awk -F':' '{print $1}') >> $GITHUB_OUTPUT
-          echo containerbase=$(echo '${{ steps.meta.outputs.tags }}' | awk -F':' '{print $1}' | awk 'BEGIN{FS=OFS="/"}{NF--; print}') >> $GITHUB_OUTPUT
 
       - name: Create manifest list and push
         run: |
           cd /tmp/digests
           ls --hide=digestdirs > digestdirs
-          cat digestdirs | xargs -i bash -c 'docker buildx imagetools create ${{steps.vars.outputs.containerbase}}/{} $(printf "${{ steps.vars.outputs.container }}@sha256:%s " {}/*)'
+          cat digestdirs | xargs -i bash -c 'docker buildx imagetools create -t ${{steps.vars.outputs.container}}:{} $(for f in {}/*; do basename "$f"; done | xargs printf "${{steps.vars.outputs.container}}@sha256:%s ")'
