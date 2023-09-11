@@ -59,20 +59,14 @@ jobs:
           outputs: type=image,name=${{ steps.vars.outputs.container }},push-by-digest=true,name-canonical=true,push=true
           platforms: ${{matrix.platform}}
 
-      - name: Export digest by ubuntu
-        run: |
-          digest="${{ steps.build.outputs.digest }}"
-          mkdir -p /tmp/digests/${{matrix.ubuntu}}
-          touch "/tmp/digests/${{matrix.ubuntu}}/${digest#sha256:}"
-
       - name: Prepare Dockerfile to extract R version with emulator
         run: |
           mkdir -p ${{matrix.ubuntu}}-${{matrix.platform}}
           cat << "EOF" > ${{matrix.ubuntu}}-${{matrix.platform}}-r.Dockerfile
           FROM ${{ steps.vars.outputs.container }}@${{ steps.build.outputs.digest }} as extract
-          RUN mkdir /r2utmp && R --version > /r2utmp/rver
+          RUN mkdir /r2utmp && R --version > /r2utmp/rver && cat /etc/os-release > /r2utmp/os-release
           FROM scratch as export
-          COPY --from=extract /r2utmp/rver /
+          COPY --from=extract /r2utmp/* /
           EOF
 
       - name: Build and push container image to ghcr
@@ -87,17 +81,24 @@ jobs:
           platforms: ${{ matrix.platform }}
 
       - name: Extract rversion
-        id: rver
+        id: versions
         run: |
           cd ${{matrix.ubuntu}}-${{matrix.platform}}
           tar -xvf r.tar
-          echo version=$(cat rver | awk 'NR==1{print $3}') >> $GITHUB_OUTPUT
+          echo rver=$(cat rver | awk 'NR==1{print $3}') >> $GITHUB_OUTPUT
+          echo osver=$(awk -F= '/VERSION_ID/ {gsub("\"", "", $2); print $2}' os-release) >> $GITHUB_OUTPUT
 
-      - name: Export digest by ubuntu and r version
+      - name: Export digest by ubuntu and r versions
         run: |
           digest="${{ steps.build.outputs.digest }}"
-          mkdir -p /tmp/digests/${{matrix.ubuntu}}-r-${{steps.rver.outputs.version}}
-          touch "/tmp/digests/${{matrix.ubuntu}}-r-${{steps.rver.outputs.version}}/${digest#sha256:}"
+          mkdir -p /tmp/digests/${{matrix.ubuntu}}
+          touch "/tmp/digests/${{matrix.ubuntu}}/${digest#sha256:}"
+          mkdir -p /tmp/digests/${{matrix.ubuntu}}-r-${{steps.versions.outputs.rver}}
+          touch "/tmp/digests/${{matrix.ubuntu}}-r-${{steps.versions.outputs.rver}}/${digest#sha256:}"
+          mkdir -p /tmp/digests/${{steps.versions.outputs.osver}}
+          touch "/tmp/digests/${{steps.versions.outputs.osver}}/${digest#sha256:}"
+          mkdir -p /tmp/digests/${{steps.versions.outputs.osver}}-r-${{steps.versions.outputs.rver}}
+          touch "/tmp/digests/${{steps.versions.outputs.osver}}-r-${{steps.versions.outputs.rver}}/${digest#sha256:}"
 
       - name: Upload digests
         uses: actions/upload-artifact@v3
