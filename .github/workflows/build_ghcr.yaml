@@ -6,6 +6,9 @@ on:
       - "**/Dockerfile"
   schedule:
     - cron: '0 0 */2 * *'
+# Avoids Github UI bugs https://github.com/orgs/community/discussions/45969
+env:
+  BUILDX_NO_DEFAULT_ATTESTATIONS: 1
 jobs:
   ghcrbuild:
     strategy:
@@ -58,6 +61,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ steps.vars.outputs.container }},push-by-digest=true,name-canonical=true,push=true
           platforms: ${{matrix.platform}}
+          provenance: false
 
       - name: Prepare Dockerfile to extract R version with emulator
         run: |
@@ -76,6 +80,7 @@ jobs:
           context: .
           push: false
           load: false
+          provenance: false
           outputs: type=tar,dest=${{matrix.ubuntu}}-${{matrix.platform}}/r.tar
           tags: ${{ steps.meta.outputs.tags }}-r
           platforms: ${{ matrix.platform }}
@@ -107,7 +112,6 @@ jobs:
           path: /tmp/digests/**
           if-no-files-found: error
           retention-days: 1
-
 
   merge:
     runs-on: ubuntu-latest
