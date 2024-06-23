@@ -1,6 +1,6 @@
 ## Emacs, make this -*- mode: sh; -*-
 
-FROM ubuntu:jammy
+FROM ubuntu:noble
 
 LABEL org.label-schema.license="GPL-2.0" \
       org.label-schema.vcs-url="https://github.com/rocker-org/" \
@@ -21,12 +21,12 @@ RUN useradd -s /bin/bash -m docker \
 ## Install key and setup R repo at CRAN
         && wget -q -O - https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc \
                 | tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc  \
-        && echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/cran_ubuntu_key.asc] https://cloud.r-project.org/bin/linux/ubuntu jammy-cran40/" \
+        && echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/cran_ubuntu_key.asc] https://cloud.r-project.org/bin/linux/ubuntu noble-cran40/" \
                 > /etc/apt/sources.list.d/cran.list \
 ## Install key and setup r2u repo, also set 'pin preference'
         && wget -q -O - https://r2u.stat.illinois.edu/ubuntu/dirk_eddelbuettel_pubkey.asc \
                 | tee -a /etc/apt/trusted.gpg.d/dirk_eddelbuettel_pubkey.asc \
-        && echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/dirk_eddelbuettel_pubkey.asc] https://r2u.stat.illinois.edu/ubuntu jammy main" \
+        && echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/dirk_eddelbuettel_pubkey.asc] https://r2u.stat.illinois.edu/ubuntu noble main" \
                 > /etc/apt/sources.list.d/r2u.list \
         && echo "Package: *" > /etc/apt/preferences.d/99r2u \
         && echo "Pin: release o=CRAN-Apt Project" >> /etc/apt/preferences.d/99r2u \
@@ -52,7 +52,6 @@ RUN apt-get update \
  		 r-base-dev \
  		 r-recommended \
 ## Install bspm for r2u as well as remotes and docopt used in littler script
-                 r-cran-bspm \
                  r-cran-docopt \
                  r-cran-littler \
                  r-cran-remotes \
@@ -60,6 +59,8 @@ RUN apt-get update \
                  python3-dbus \
                  python3-gi \
                  python3-apt \
+## But install bspm from source
+        && Rscript -e 'install.packages("bspm")' \
 ## Support user-level installation of R packages
 	&& chown root:staff "/usr/local/lib/R/site-library" \
 	&& chmod g+ws "/usr/local/lib/R/site-library" \
