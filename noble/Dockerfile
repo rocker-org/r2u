@@ -18,6 +18,7 @@ RUN useradd -s /bin/bash -m docker \
 		ca-certificates \
 		locales \
 		wget \
+		adduser \
 ## Install key and setup R repo at CRAN
         && wget -q -O - https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc \
                 | tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc  \
