@@ -13,8 +13,9 @@ LABEL org.label-schema.license="GPL-2.0" \
 RUN useradd -s /bin/bash -m docker \
 	&& usermod -a -G staff docker \
 ## Refresh apt, install minimal tools
-        && apt-get update \
-	&& apt-get install -y --no-install-recommends \
+        && apt update \
+        && apt upgrade -y \
+	&& apt install -y --no-install-recommends \
 		ca-certificates \
 		locales \
 		wget \
@@ -38,15 +39,15 @@ RUN useradd -s /bin/bash -m docker \
 	&& /usr/sbin/update-locale LANG=en_US.UTF-8
 
 ## Set some variables
-ENV LC_ALL en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV DEBIAN_FRONTEND noninteractive
-ENV TZ UTC
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=UTC
 
 ## Now install R and littler, and create a link for littler in /usr/local/bin
 ## Default CRAN repo is now set by R itself, and littler knows about it too
-RUN apt-get update \
-        && apt-get install -y --no-install-recommends \
+RUN apt update \
+        && apt install -y --no-install-recommends \
  		 r-base \
  		 r-base-dev \
  		 r-recommended \
