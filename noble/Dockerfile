@@ -22,12 +22,12 @@ RUN useradd -s /bin/bash -m docker \
 ## Install key and setup R repo at CRAN
         && wget -q -O - https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc \
                 | tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc  \
-        && echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/cran_ubuntu_key.asc] https://cloud.r-project.org/bin/linux/ubuntu noble-cran40/" \
+        && echo "deb [signed-by=/etc/apt/trusted.gpg.d/cran_ubuntu_key.asc] https://cloud.r-project.org/bin/linux/ubuntu noble-cran40/" \
                 > /etc/apt/sources.list.d/cran.list \
 ## Install key and setup r2u repo, also set 'pin preference'
         && wget -q -O - https://r2u.stat.illinois.edu/ubuntu/dirk_eddelbuettel_pubkey.asc \
                 | tee -a /etc/apt/trusted.gpg.d/dirk_eddelbuettel_pubkey.asc \
-        && echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/dirk_eddelbuettel_pubkey.asc] https://r2u.stat.illinois.edu/ubuntu noble main" \
+        && echo "deb [signed-by=/etc/apt/trusted.gpg.d/dirk_eddelbuettel_pubkey.asc] https://r2u.stat.illinois.edu/ubuntu noble main" \
                 > /etc/apt/sources.list.d/r2u.list \
         && echo "Package: *" > /etc/apt/preferences.d/99r2u \
         && echo "Pin: release o=CRAN-Apt Project" >> /etc/apt/preferences.d/99r2u \
