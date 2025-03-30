@@ -27,8 +27,6 @@ RUN useradd -s /bin/bash -m docker \
 ## Install key and setup r2u repo, also set 'pin preference'
         && wget -q -O - https://r2u.stat.illinois.edu/ubuntu/dirk_eddelbuettel_pubkey.asc \
                 | tee -a /etc/apt/trusted.gpg.d/dirk_eddelbuettel_pubkey.asc \
-        && echo "deb [signed-by=/etc/apt/trusted.gpg.d/dirk_eddelbuettel_pubkey.asc] https://r2u.stat.illinois.edu/ubuntu noble main" \
-                > /etc/apt/sources.list.d/r2u.list \
         && echo "Package: *" > /etc/apt/preferences.d/99r2u \
         && echo "Pin: release o=CRAN-Apt Project" >> /etc/apt/preferences.d/99r2u \
         && echo "Pin: release l=CRAN-Apt Packages" >> /etc/apt/preferences.d/99r2u \
@@ -37,6 +35,9 @@ RUN useradd -s /bin/bash -m docker \
         && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
 	&& locale-gen en_US.utf8 \
 	&& /usr/sbin/update-locale LANG=en_US.UTF-8
+
+## New format *.sources instead of shorter *.list
+COPY r2u.sources /etc/apt/sources.list.d/
 
 ## Set some variables
 ENV LC_ALL=en_US.UTF-8
