@@ -13,7 +13,7 @@ on:
 jobs:
   dual-platform:
     runs-on: ubuntu-latest
-    name: 24.04 (dual-platform)
+    name: 24.04 (amd64, arm64)
     steps:
     - name: Checkout
       uses: actions/checkout@v4
