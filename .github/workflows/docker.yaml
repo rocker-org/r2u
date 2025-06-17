@@ -1,5 +1,5 @@
 ## Dual build:
-##  - once in (focal,jammy) matrix for amd64 only, and
+##  - once in (focal [now skipped],jammy) matrix for amd64 only, and
 ##  - once (noble) for a dual-platform (arm64, amd64)
 
 name: docker
@@ -42,7 +42,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - { ver: '20.04', tag: 'focal', cpu: 'amd64', runs: 'ubuntu-20.04' }
+          #- { ver: '20.04', tag: 'focal', cpu: 'amd64', runs: 'ubuntu-20.04' }
           - { ver: '22.04', tag: 'jammy', cpu: 'amd64', runs: 'ubuntu-22.04' }
     steps:
     - name: Checkout
