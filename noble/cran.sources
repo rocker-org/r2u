@@ -1,0 +1,6 @@
+Types: deb
+URIs: https://cloud.r-project.org/bin/linux/ubuntu
+Suites: noble-cran40/
+Components: 
+Signed-By: /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
+Enabled: yes

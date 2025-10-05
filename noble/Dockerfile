@@ -14,7 +14,7 @@ RUN useradd -s /bin/bash -m docker \
 	&& usermod -a -G staff docker \
 ## Refresh apt, install minimal tools
         && apt update \
-        && apt upgrade -y \
+        && apt upgrade --yes \
 	&& apt install -y --no-install-recommends \
 	        ca-certificates \
                 lsb-release \
@@ -22,13 +22,6 @@ RUN useradd -s /bin/bash -m docker \
                 sudo \
 		wget \
 ## Install key and setup R repo at CRAN
-        && wget -q -O - https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc \
-                | tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc  \
-        && echo "deb [signed-by=/etc/apt/trusted.gpg.d/cran_ubuntu_key.asc] https://cloud.r-project.org/bin/linux/ubuntu noble-cran40/" \
-                > /etc/apt/sources.list.d/cran.list \
-## Install key and setup r2u repo, also set 'pin preference'
-        && wget -q -O - https://r2u.stat.illinois.edu/ubuntu/dirk_eddelbuettel_pubkey.asc \
-                | tee -a /etc/apt/trusted.gpg.d/dirk_eddelbuettel_pubkey.asc \
         && echo "Package: *" > /etc/apt/preferences.d/99r2u \
         && echo "Pin: release o=CRAN-Apt Project" >> /etc/apt/preferences.d/99r2u \
         && echo "Pin: release l=CRAN-Apt Packages" >> /etc/apt/preferences.d/99r2u \
@@ -39,7 +32,13 @@ RUN useradd -s /bin/bash -m docker \
 	&& /usr/sbin/update-locale LANG=en_US.UTF-8
 
 ## New format *.sources instead of shorter *.list
+## Canonical sources for the key files are
+##   https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc
+##   https://r2u.stat.illinois.edu/ubuntu/dirk_eddelbuettel_pubkey.asc
 COPY r2u.sources /etc/apt/sources.list.d/
+COPY dirk_eddelbuettel_pubkey.asc /etc/apt/trusted.gpg.d/
+COPY cran.sources /etc/apt/sources.list.d/
+COPY marutter_pubkey.asc /etc/apt/trusted.gpg.d/cran_ubuntu_key.as
 
 ## Set some variables
 ENV LC_ALL=en_US.UTF-8
