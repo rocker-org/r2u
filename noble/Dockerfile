@@ -15,12 +15,7 @@ RUN useradd -s /bin/bash -m docker \
 ## Refresh apt, install minimal tools
         && apt update \
         && apt upgrade --yes \
-	&& apt install -y --no-install-recommends \
-	        ca-certificates \
-                lsb-release \
-		locales \
-                sudo \
-		wget \
+        && apt install --yes --no-install-recommends locales \
 ## Install key and setup R repo at CRAN
         && echo "Package: *" > /etc/apt/preferences.d/99r2u \
         && echo "Pin: release o=CRAN-Apt Project" >> /etc/apt/preferences.d/99r2u \
@@ -38,7 +33,7 @@ RUN useradd -s /bin/bash -m docker \
 COPY r2u.sources /etc/apt/sources.list.d/
 COPY dirk_eddelbuettel_pubkey.asc /etc/apt/trusted.gpg.d/
 COPY cran.sources /etc/apt/sources.list.d/
-COPY marutter_pubkey.asc /etc/apt/trusted.gpg.d/cran_ubuntu_key.as
+COPY marutter_pubkey.asc /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
 
 ## Set some variables
 ENV LC_ALL=en_US.UTF-8
