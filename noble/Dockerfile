@@ -16,8 +16,10 @@ RUN useradd -s /bin/bash -m docker \
         && apt update \
         && apt upgrade -y \
 	&& apt install -y --no-install-recommends \
-		ca-certificates \
+	        ca-certificates \
+                lsb-release \
 		locales \
+                sudo \
 		wget \
 ## Install key and setup R repo at CRAN
         && wget -q -O - https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc \
