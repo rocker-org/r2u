@@ -11,6 +11,7 @@ RUN apt update \
         && apt upgrade --yes \
         && apt install --yes --no-install-recommends \
 	        ca-certificates \
+                curl \
                 devscripts \
                 lsb-release \
                 qpdf \
