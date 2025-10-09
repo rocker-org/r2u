@@ -15,7 +15,9 @@ RUN useradd -s /bin/bash -m docker \
 ## Refresh apt, install minimal tools
         && apt update \
         && apt upgrade --yes \
-        && apt install --yes --no-install-recommends locales \
+        && apt install --yes --no-install-recommends \
+      	      ca-certificates \
+      	      locales \
 ## Install key and setup R repo at CRAN
         && echo "Package: *" > /etc/apt/preferences.d/99r2u \
         && echo "Pin: release o=CRAN-Apt Project" >> /etc/apt/preferences.d/99r2u \
@@ -45,7 +47,8 @@ ENV TZ=UTC
 # Now install R and littler, and create a link for littler in /usr/local/bin
 # Default CRAN repo is now set by R itself, and littler knows about it too
 RUN apt update \
-        && apt install -y --no-install-recommends \
+        && apt upgrade --yes \
+        && apt install --yes --no-install-recommends \
  		 r-base \
  		 r-base-dev \
  		 r-recommended \
@@ -80,5 +83,7 @@ RUN apt update \
         && echo "options(bspm.version.check=FALSE)" >> /etc/R/Rprofile.site \
         && echo "suppressMessages(bspm::enable())" >> /etc/R/Rprofile.site \
         && echo 'APT::Install-Recommends "false";' > /etc/apt/apt.conf.d/90local-no-recommends \
+        && apt update \
+        && apt upgrade --yes \
 	&& rm -rf /tmp/downloaded_packages/ /tmp/*.rds \
  	&& rm -rf /var/lib/apt/lists/*
