@@ -9,6 +9,8 @@ on:
   #pull_request:
   #release:
   workflow_dispatch:
+  schedule:
+  - cron: "33 3 3 * *"
 
 jobs:
   dual-platform:
