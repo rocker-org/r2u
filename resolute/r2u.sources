@@ -1,0 +1,7 @@
+Types: deb
+URIs: https://r2u.stat.illinois.edu/ubuntu
+Suites: resolute
+Components: main
+Signed-By: /etc/apt/trusted.gpg.d/dirk_eddelbuettel_pubkey.asc
+Enabled: yes
+Architectures: amd64 arm64
