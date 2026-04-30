@@ -36,6 +36,7 @@ COPY r2u.sources /etc/apt/sources.list.d/
 COPY dirk_eddelbuettel_pubkey.asc /etc/apt/trusted.gpg.d/
 #FIXME COPY cran.sources /etc/apt/sources.list.d/
 COPY rutter.sources /etc/apt/sources.list.d/
+COPY marutter_pubkey.asc /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
 
 ## Set some variables
 ENV LC_ALL=en_US.UTF-8
