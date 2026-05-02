@@ -54,6 +54,15 @@ RUN apt update \
  		 r-base \
  		 r-base-dev \
  		 r-recommended \
+        && cd /tmp \
+        && wget https://github.com/eddelbuettel/R-4.6.0-binary-transition/releases/download/4.6.0-2.2204.0/r-base_4.6.0-2.2204.0_all.deb \
+        && wget https://github.com/eddelbuettel/R-4.6.0-binary-transition/releases/download/4.6.0-2.2204.0/r-base-core_4.6.0-2.2204.0_amd64.deb \
+        && wget https://github.com/eddelbuettel/R-4.6.0-binary-transition/releases/download/4.6.0-2.2204.0/r-base-dev_4.6.0-2.2204.0_all.deb \
+        && wget https://github.com/eddelbuettel/R-4.6.0-binary-transition/releases/download/4.6.0-2.2204.0/r-recommended_4.6.0-2.2204.0_all.deb \
+        && dpkg --install r-*.deb \
+        && rm -v r-*.deb \
+        && Rscript -e 'install.packages("data.table", type="source")' \
+        && apt install -y --no-install-recommends \
 ## Install bspm for r2u as well as remotes and docopt used in littler script
                  r-cran-bspm \
                  r-cran-docopt \
