@@ -34,8 +34,8 @@ RUN useradd -s /bin/bash -m docker \
 ##   https://r2u.stat.illinois.edu/ubuntu/dirk_eddelbuettel_pubkey.asc
 COPY r2u.sources /etc/apt/sources.list.d/
 COPY dirk_eddelbuettel_pubkey.asc /etc/apt/trusted.gpg.d/
-#FIXME COPY cran.sources /etc/apt/sources.list.d/
-COPY rutter.sources /etc/apt/sources.list.d/
+COPY cran.sources /etc/apt/sources.list.d/
+#Alternate  COPY rutter.sources /etc/apt/sources.list.d/
 COPY marutter_pubkey.asc /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
 
 ## Set some variables
